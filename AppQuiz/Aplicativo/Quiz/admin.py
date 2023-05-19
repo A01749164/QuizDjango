@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Pregunta, ElegirRespuesta, PreguntasRespondidas
+from .models import Pregunta, ElegirRespuesta, PreguntasRespondidas, QuizUsuario
 from .forms import ElegirInlineFormSet
 
 #Sebastian Burgos
@@ -26,3 +26,4 @@ class PreguntasRespondidasAdmin(admin.ModelAdmin):
 admin.site.register(Pregunta, PreguntaAdmin)
 admin.site.register(ElegirRespuesta)
 admin.site.register(PreguntasRespondidas)
+admin.site.register(QuizUsuario)
