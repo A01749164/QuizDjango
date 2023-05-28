@@ -46,12 +46,23 @@ class QuizUsuario(models.Model):
         if respuesta_seleccionada.correcta is True:
             pregunta_respondida.correcta = True
             pregunta_respondida.puntaje_obtenido = respuesta_seleccionada.pregunta.max_puntaje
-        
+            pregunta_respondida.respuesta = respuesta_seleccionada 
+        else:
+            pregunta_respondida.respuesta = respuesta_seleccionada 
+
         pregunta_respondida.save()
+        self.actualizar_puntaje()
+        
+    def actualizar_puntaje(self):
+        puntaje_actualizado = self.intentos.filter(correcta=True).aggregate(
+            models.Sum('puntaje_obtenido'))['puntaje_obtenido__sum']
+        
+        self.puntaje_total=puntaje_actualizado
+        self.save()
 
 class PreguntasRespondidas(models.Model):
-    quizUser = models.ForeignKey(QuizUsuario, on_delete=models.CASCADE)
+    quizUser = models.ForeignKey(QuizUsuario, on_delete=models.CASCADE, related_name='intentos')
     pregunta = models.ForeignKey(Pregunta, on_delete=models.CASCADE)
-    respuesa = models.ForeignKey(ElegirRespuesta, on_delete=models.CASCADE, related_name='intentos')
+    respuesa = models.ForeignKey(ElegirRespuesta, on_delete=models.CASCADE, null=True)
     correcta = models.BooleanField(verbose_name='¿Es esta la respuesta correcta?', default=False, null=False)
     puntaje_obtenido = models.DecimalField(verbose_name='Puntaje Obtenido', default=0, decimal_places=2, max_digits=6)

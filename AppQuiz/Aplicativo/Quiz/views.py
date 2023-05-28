@@ -1,4 +1,4 @@
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from .forms import RegistroFormulario, UsuarioLoginFormulario
 from .models import QuizUsuario, Pregunta, PreguntasRespondidas
@@ -13,7 +13,7 @@ def inicio(request):
     return render(request, 'inicio.html', context)
 
 def HomeUsuario(request):
-    return render(request, 'Usuario/home.html')
+    return render(request, 'Usuario/home. html')
 
 def jugar(request):
 
@@ -44,8 +44,23 @@ def jugar(request):
 
 	return render(request, 'play/jugar.html', context)
 
+def resultado_pregunta(request, pregunta_respondida_pk):
+      respondida=get_object_or_404(PreguntasRespondidas, pk=pregunta_respondida_pk)
 
+      context={
+            'respondida':respondida
+      }
+      return render(request, 'play/resiltados.html', context)
 
+def tablero(request):
+      total_usuarios_quiz=QuizUsuario.objects.order_by('-puntaje_total')[:10]
+      contador =total_usuarios_quiz.cont()
+
+      contexto={
+            'usuario_quiz':total_usuarios_quiz,
+            'contar_user':contador
+      }
+      return render(request,'play/tablero.html',contexto)
 def loginView(request):
     titulo = 'login'
     form = UsuarioLoginFormulario(request.POST or None)
