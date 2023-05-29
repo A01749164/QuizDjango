@@ -1,14 +1,23 @@
+"""
+### Froms Configuration ###
+29/05/23
+Jeovani Hernandez Bastida A01749164
+José Miguel Garcia Gurtubay Moreno A01373750
+Sebastian Burgos Alanís A01746459
+Sandra Ximena Téllez Olvera A01752142
+"""
+
 from django import forms 
-from .models import Pregunta, ElegirRespuesta, PreguntasRespondidas
+from .models import Pregunta, ChooseAnswer, PreguntasRespondidas
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, get_user_model
 
-# Jeovani Hernandez
 User = get_user_model()
 
-class ElegirInlineFormSet(forms.BaseInlineFormSet):
+# In this class, 
+class ChooseInlineFormSet(forms.BaseInlineFormSet):
     def clean(self):
-        super(ElegirInlineFormSet, self).clean()
+        super(ChooseInlineFormSet, self).clean()
         
         respuesta_correcta = 0
         for formulario in self.forms:
@@ -22,7 +31,8 @@ class ElegirInlineFormSet(forms.BaseInlineFormSet):
             assert respuesta_correcta == Pregunta.NUMERO_DE_RESPUESTAS_PERMITIDAS
         except AssertionError:
             raise forms.ValidationError('Debe existir unicamente una sola respuesta')
-        
+
+# In this class, the user can login giving an exisiting username and password       
 class UsuarioLoginFormulario(forms.Form):
     username = forms.CharField()
     password = forms.CharField(widget=forms.PasswordInput)
@@ -40,6 +50,7 @@ class UsuarioLoginFormulario(forms.Form):
                 raise forms.ValidationError("Usuario inactivo")
         return super(UsuarioLoginFormulario, self).clean(*args, **kwargs)
 
+# In this class, there is a validation and creation of a
 class RegistroFormulario(UserCreationForm):
     email = forms.EmailField(required=True)
     first_name = forms.CharField(required=True)

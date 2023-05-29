@@ -1,9 +1,17 @@
+"""
+### Model Configuration ###
+29/05/23
+Jeovani Hernandez Bastida A01749164
+José Miguel Garcia Gurtubay Moreno A01373750
+Sebastian Burgos Alanís A01746459
+Sandra Ximena Téllez Olvera A01752142
+"""
 from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import User
 import random
 
-#Sebastian Burgos 
+# In this class, 
 class Pregunta(models.Model):
     NUMERO_DE_RESPUESTAS_PERMITIDAS = 1
     texto = models.TextField(verbose_name='texto de la pregunta')
@@ -12,7 +20,8 @@ class Pregunta(models.Model):
     def __str__(self):
         return self.texto
 
-class ElegirRespuesta(models.Model):
+# In this class,
+class ChooseAnswer(models.Model):
     MAXIMO_RESPUESTA = 4
     pregunta = models.ForeignKey(Pregunta, related_name='opciones', on_delete=models.CASCADE)
     correcta = models.BooleanField(verbose_name='¿Es esta la pregunta correcta?', default=False, null=False)
@@ -21,12 +30,11 @@ class ElegirRespuesta(models.Model):
     def __str__(self):
         return self.texto
     
-# Jeovani Hernandez    
+# In this class,     
 class QuizUsuario(models.Model):
     usuario = models.OneToOneField(User, on_delete=models.CASCADE)
     puntaje_total = models.DecimalField(verbose_name='Puntaje Total', default=0, decimal_places=2, max_digits=10)
 
-    #Sandra Tellez
     def crear_intentos(self, pregunta):
         intento = PreguntasRespondidas(pregunta = pregunta, quizUser = self)
         intento.save()
@@ -60,9 +68,10 @@ class QuizUsuario(models.Model):
         self.puntaje_total=puntaje_actualizado
         self.save()
 
+# In this class, 
 class PreguntasRespondidas(models.Model):
     quizUser = models.ForeignKey(QuizUsuario, on_delete=models.CASCADE, related_name='intentos')
     pregunta = models.ForeignKey(Pregunta, on_delete=models.CASCADE)
-    respuesa = models.ForeignKey(ElegirRespuesta, on_delete=models.CASCADE, null=True)
+    respuesa = models.ForeignKey(ChooseAnswer, on_delete=models.CASCADE, null=True)
     correcta = models.BooleanField(verbose_name='¿Es esta la respuesta correcta?', default=False, null=False)
     puntaje_obtenido = models.DecimalField(verbose_name='Puntaje Obtenido', default=0, decimal_places=2, max_digits=6)
