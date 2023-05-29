@@ -1,9 +1,67 @@
-<form method="POST">
-    {% csrf_token %}
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Formulario</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f7f7f7;
+    }
+    
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 4px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    form {
+      display: flex;
+      flex-direction: column;
 
-    {{form.as_p}}
+    }
+    
+    label {
+      font-weight: bold;
+      margin-bottom: 5px;
+      max-width: 200px;
+    }
 
-    <button type="submit">
-        Enviar
-    </button>
-</form>
+    button[type="submit"] {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      background-color: #2b342c;
+      color: #fff;
+      text-align: center;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    
+    button[type="submit"]:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="body">
+        <form method="POST">
+            {% csrf_token %}
+        
+            {{form.as_p}}
+        
+            <button type="submit">
+                Enviar
+            </button>
+        </form>
+    </div>
+  </div>
+</body>
+</html>
