@@ -2,19 +2,20 @@
 {% extends 'base.html' %}
 
 {% block contenido %}
+
 {% if pregunta is None %}
 
 <div class="container">
     <div class="jumbotron my-4">
         <h1>Ya haz respondido a todas nuestras preguntas. Mira el tablero de posiciones</h1>
-        <a href="">Ver aqui</a>
+        <a href="{% url 'tablero' %}">Ver aqui</a>
     </div>
 </div>
 {% else %}
 <div class="container">
     <div class="jumbotron my-4">
         <h3>
-            {{prehunta.texto}}
+            {{pregunta.texto}}
         </h3>
         <form method="POST" class="form">
             {% csrf_token %}

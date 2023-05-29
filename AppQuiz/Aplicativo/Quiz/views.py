@@ -13,7 +13,7 @@ def inicio(request):
     return render(request, 'inicio.html', context)
 
 def HomeUsuario(request):
-    return render(request, 'Usuario/home. html')
+    return render(request, 'Usuario/home.html')
 
 def jugar(request):
 
@@ -25,11 +25,11 @@ def jugar(request):
 		respuesta_pk = request.POST.get('respuesta_pk')
 
 		try:
-			opcion_seleccionada = pregunta_respondida.pregunta.opciones.get(pk=respuesta_pk)
+			opcion_selecionada = pregunta_respondida.pregunta.opciones.get(pk=respuesta_pk)
 		except ObjectDoesNotExist:
 			raise Http404
 
-		QuizUser.validar_intento(pregunta_respondida, opcion_seleccionada)
+		QuizUser.validar_intento(pregunta_respondida, opcion_selecionada)
 
 		return redirect('resultado', pregunta_respondida.pk)
 
@@ -50,17 +50,19 @@ def resultado_pregunta(request, pregunta_respondida_pk):
       context={
             'respondida':respondida
       }
-      return render(request, 'play/resiltados.html', context)
+      return render(request, 'play/resultados.html', context)
 
 def tablero(request):
-      total_usuarios_quiz=QuizUsuario.objects.order_by('-puntaje_total')[:10]
-      contador =total_usuarios_quiz.cont()
+	total_usaurios_quiz = QuizUsuario.objects.order_by('-puntaje_total')[:10]
+	contador = total_usaurios_quiz.count()
 
-      contexto={
-            'usuario_quiz':total_usuarios_quiz,
-            'contar_user':contador
-      }
-      return render(request,'play/tablero.html',contexto)
+	context = {
+
+		'usuario_quiz':total_usaurios_quiz,
+		'contar_user':contador
+	}
+	return render(request, 'play/tablero.html', context)
+
 def loginView(request):
     titulo = 'login'
     form = UsuarioLoginFormulario(request.POST or None)
