@@ -28,7 +28,7 @@ class AdminQuestion(admin.ModelAdmin):
 
 # In this class
 class AdminQuestionsAnswered(admin.ModelAdmin):
-    list_display = ['pregunta', 'respuesta', 'correcta', 'puntaje_obtenido']
+    list_display = ['pregunta', 'respuesa', 'correcta', 'puntaje_obtenido']
     
     class Meta:
         model = PreguntasRespondidas
