@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>App Quiz</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    
+    header {
+      background-color: #333;
+      color: #fff;
+      padding: 20px;
+      text-align: center;
+    }
+    
+    nav {
+      background-color: #f1f1f1;
+      padding: 10px;
+      text-align: center;
+    }
+    
+    nav ul {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+    }
+    
+    nav ul li {
+      display: inline-block;
+      margin-right: 10px;
+    }
+    
+    nav ul li a {
+      color: #333;
+      text-decoration: none;
+      padding: 5px 10px;
+    }
+    
+    main {
+      padding: 20px;
+      text-align: center;
+    }
+    
+  </style>
+</head>
+<body>
+  <header>
+    <h1>APP QUIZ</h1>
+  </header>
+  
+  <nav>
+    <ul>
+      <li><a href="{% url 'registro' %}">Sign in</a></li>
+      <li><a href="{% url 'login' %}">login</a></li>
+    </ul>
+  </nav>
+  
+  <main>
+    <h2>Bienvenido</h2>
+    <h3>Este es un proyecto elavorado por:</h3>
+    <p>Jeovani Hernandez Bastida A01749164</p>
+    <p>José Miguel Garcia Gurtubay Moreno A01373750</p>
+    <p>Sebastian Burgos Alanís A01746459</p>
+    <p>Sandra Ximena Téllez Olvera A01752142</p>
+  </main>
+</body>
+</html>
