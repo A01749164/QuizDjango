@@ -34,7 +34,7 @@ def jugar(request):
 		respuesta_pk = request.POST.get('respuesta_pk')
 
 		try:
-			opcion_selecionada = pregunta_respondida.Question.opciones.get(pk=respuesta_pk)
+			opcion_selecionada = pregunta_respondida.pregunta.opciones.get(pk=respuesta_pk)
 		except ObjectDoesNotExist:
 			raise Http404
 
@@ -68,7 +68,6 @@ def tablero(request):
 	contador = total_usaurios_quiz.count()
 
 	context = {
-
 		'usuario_quiz':total_usaurios_quiz,
 		'contar_user':contador
 	}
