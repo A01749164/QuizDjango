@@ -20,7 +20,7 @@
             {% for user_quiz in usuario_quiz %}
             <tr>
                 <th>{{forloop.counter}}</th>
-                <th>{{user_quiz.usuario.user.username}}</th>
+                <th>{{user_quiz.usuario.username}}</th>
                 <th>{{user_quiz.puntaje_total}}</th>
             </tr>
             {% endfor %}
