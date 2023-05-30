@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block contenido %}
+  <div class="container">
+    <h2>Seleccionar número de preguntas</h2>
+    <form method="POST">
+      {% csrf_token %}
+      <div class="form-group">
+        <label for="cantidad_preguntas">Cantidad de preguntas:</label>
+        <input type="number" class="form-control" id="cantidad_preguntas" name="cantidad_preguntas" min="1" max="30" required>
+      </div>
+      <button type="submit" class="btn btn-primary">Continuar</button>
+    </form>
+  </div>
+{% endblock %}

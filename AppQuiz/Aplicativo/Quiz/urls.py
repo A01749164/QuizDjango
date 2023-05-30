@@ -15,7 +15,8 @@ from .views import (
     HomeUsuario, 
     jugar,
     resultado_pregunta,
-    tablero)
+    tablero,
+    seleccionarPreguntas)
 
 urlpatterns = [
     path('', inicio, name='inicio'),
@@ -24,7 +25,8 @@ urlpatterns = [
     path('logout_vista/', logout_vista, name='logout_vista'),
     path('registro/', registro, name='registro'),
     path('tablero/', tablero, name='tablero'),
-    path('jugar/', jugar, name='jugar'),
+    path('seleccionarPreguntas/', seleccionarPreguntas, name='seleccionar_preguntas'),
+    path('jugar/<int:cantidad_preguntas>/', jugar, name='jugar'),
     path('resultado/<int:pregunta_respondida_pk>', resultado_pregunta, name='resultado')
     
 ]
