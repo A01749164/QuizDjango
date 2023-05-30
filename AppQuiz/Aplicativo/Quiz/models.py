@@ -39,9 +39,15 @@ class QuizUsuario(models.Model):
         intento = PreguntasRespondidas(pregunta = pregunta, quizUser = self)
         intento.save()
 
-    def obtener_nuevas_preguntas(self):
-        respondidas = PreguntasRespondidas.objects.filter(quizUser = self).values_list('pregunta__pk', flat= True)
-        preguntas_restantes =  Pregunta.objects.exclude(pk__in = respondidas)
+    # def obtener_nuevas_preguntas(self):
+    #     respondidas = PreguntasRespondidas.objects.filter(quizUser = self).values_list('pregunta__pk', flat= True)
+    #     preguntas_restantes =  Pregunta.objects.exclude(pk__in = respondidas)
+    #     if not preguntas_restantes.exists():
+    #         return None
+    #     return random.choice(preguntas_restantes)
+    def obtener_nuevas_preguntas(self, cantidad_preguntas):
+        respondidas = PreguntasRespondidas.objects.filter(quizUser=self).values_list('pregunta__pk', flat=True)
+        preguntas_restantes = Pregunta.objects.exclude(pk__in=respondidas)[:cantidad_preguntas]
         if not preguntas_restantes.exists():
             return None
         return random.choice(preguntas_restantes)

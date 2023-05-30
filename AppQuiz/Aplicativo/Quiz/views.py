@@ -77,39 +77,41 @@ from .models import Pregunta, QuizUsuario, PreguntasRespondidas, ChooseAnswer
 
 def seleccionarPreguntas(request):
     if request.method == 'POST':
-        cantidad_preguntas = int(request.POST.get('cantidad_preguntas'))
+        cantidad_preguntas = int(request.POST.get('cantidad_preguntas'))    
         return redirect('jugar', cantidad_preguntas=cantidad_preguntas)
 
     return render(request, 'play/seleccionar_preguntas.html')
 
+# En la función jugar(request, cantidad_preguntas), después de obtener la siguiente pregunta
+# y antes de redirigir a los resultados, verifica si se ha alcanzado el número máximo de preguntas respondidas
 # In this Function, 
 def jugar(request, cantidad_preguntas):
     QuizUser, created = QuizUsuario.objects.get_or_create(usuario=request.user)
-
     if request.method == 'POST':
-        pregunta_pk = request.POST.get('pregunta_pk')
-        pregunta_respondida = QuizUser.intentos.select_related('pregunta').get(pregunta__pk=pregunta_pk)
-        respuesta_pk = request.POST.get('respuesta_pk')
+        if cantidad_preguntas>0:
+            pregunta_pk = request.POST.get('pregunta_pk')
+            pregunta_respondida = QuizUser.intentos.select_related('pregunta').get(pregunta__pk=pregunta_pk)
+            respuesta_pk = request.POST.get('respuesta_pk')
 
-        try:
-            opcion_seleccionada = pregunta_respondida.pregunta.opciones.get(pk=respuesta_pk)
-        except ObjectDoesNotExist:
-            raise Http404
+            try:
+                opcion_seleccionada = pregunta_respondida.pregunta.opciones.get(pk=respuesta_pk)
+            except ObjectDoesNotExist:
+                raise Http404
 
-        QuizUser.validar_intento(pregunta_respondida, opcion_seleccionada)
+            QuizUser.validar_intento(pregunta_respondida, opcion_seleccionada)
 
-        # Obtener la siguiente pregunta o redirigir al resultado si no hay más preguntas
-        siguiente_pregunta = QuizUser.obtener_nuevas_preguntas()
-        if siguiente_pregunta is not None:
-            QuizUser.crear_intentos(siguiente_pregunta)
-            return HttpResponseRedirect(f'/resultado/{pregunta_respondida.pk}?cantidad_preguntas={cantidad_preguntas}')
-            return redirect('resultado', pregunta_respondida.pk)
-        else:
-            return HttpResponseRedirect(f'/resultado/{pregunta_respondida.pk}?cantidad_preguntas={cantidad_preguntas}')
-            return redirect('resultado', pregunta_respondida.pk)
+            # Obtener la siguiente pregunta o redirigir al resultado si no hay más preguntas
+            siguiente_pregunta = QuizUser.obtener_nuevas_preguntas(cantidad_preguntas)
+            if siguiente_pregunta is not None:
+                QuizUser.crear_intentos(siguiente_pregunta)
+                return HttpResponseRedirect(f'/resultado/{pregunta_respondida.pk}?cantidad_preguntas={cantidad_preguntas}')
+                return redirect('resultado', pregunta_respondida.pk)
+            else:
+                # return HttpResponseRedirect(f'/resultado/{pregunta_respondida.pk}?cantidad_preguntas={cantidad_preguntas}')
+                return redirect('tablero')#pregunta_respondida.pk
 
     else:
-        pregunta = QuizUser.obtener_nuevas_preguntas()
+        pregunta = QuizUser.obtener_nuevas_preguntas(cantidad_preguntas)
         if pregunta is not None:
             QuizUser.crear_intentos(pregunta)
 
@@ -117,12 +119,12 @@ def jugar(request, cantidad_preguntas):
             'pregunta': pregunta
         }
 
-    return render(request, 'play/jugar.html', context)
+        return render(request, 'play/jugar.html', context)
 
 
 # In this Function, 
 def resultado_pregunta(request, pregunta_respondida_pk):
-      cantidad_preguntas = request.GET.get('cantidad_preguntas')
+      cantidad_preguntas = str(int(request.GET.get('cantidad_preguntas'))-1)
       respondida=get_object_or_404(PreguntasRespondidas, pk=pregunta_respondida_pk)
 
       context={
