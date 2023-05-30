@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 
+{% load static %}
 {% block contenido %}
 
 <div class="container">
@@ -30,7 +31,7 @@
 
 	{% endif %}
 
-	<a href="{% url 'jugar' %}">
+	<a href="{% url 'jugar' cantidad_preguntas %}">
 		<button class="btn-success">
 			Continuar con la siguiente pregunta
 		</button>

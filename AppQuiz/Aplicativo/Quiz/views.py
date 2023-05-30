@@ -6,7 +6,7 @@ José Miguel Garcia Gurtubay Moreno A01373750
 Sebastian Burgos Alanís A01746459
 Sandra Ximena Téllez Olvera A01752142
 """
-from django.shortcuts import redirect, render, get_object_or_404
+from django.shortcuts import redirect, render, get_object_or_404,HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
 from .forms import RegistroFormulario, UsuarioLoginFormulario
 from .models import QuizUsuario, Pregunta, PreguntasRespondidas, ChooseAnswer
@@ -102,8 +102,10 @@ def jugar(request, cantidad_preguntas):
         siguiente_pregunta = QuizUser.obtener_nuevas_preguntas()
         if siguiente_pregunta is not None:
             QuizUser.crear_intentos(siguiente_pregunta)
-            return redirect('jugar', cantidad_preguntas=cantidad_preguntas)
+            return HttpResponseRedirect(f'/resultado/{pregunta_respondida.pk}?cantidad_preguntas={cantidad_preguntas}')
+            return redirect('resultado', pregunta_respondida.pk)
         else:
+            return HttpResponseRedirect(f'/resultado/{pregunta_respondida.pk}?cantidad_preguntas={cantidad_preguntas}')
             return redirect('resultado', pregunta_respondida.pk)
 
     else:
@@ -120,10 +122,12 @@ def jugar(request, cantidad_preguntas):
 
 # In this Function, 
 def resultado_pregunta(request, pregunta_respondida_pk):
+      cantidad_preguntas = request.GET.get('cantidad_preguntas')
       respondida=get_object_or_404(PreguntasRespondidas, pk=pregunta_respondida_pk)
 
       context={
-            'respondida':respondida
+            'respondida':respondida,
+            'cantidad_preguntas':cantidad_preguntas
       }
       return render(request, 'play/resultados.html', context)
 
